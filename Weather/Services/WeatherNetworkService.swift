@@ -8,8 +8,8 @@
 
 import Foundation
 
-struct NetworkService {
-    static let shared = NetworkService()
+class WeatherNetworkService {
+    static let shared = WeatherNetworkService()
     
     let URL_BASE = "http://api.openweathermap.org/data/2.5/weather?"
     let LATITUDE = "lat="
@@ -19,10 +19,10 @@ struct NetworkService {
     
     let session = URLSession(configuration: .default)
     
-    func getWeather(onSuccess: @escaping (Forecast, WeatherItems, Main) -> Void, onError: @escaping (String) -> Void) {
-        let url = URL(string: "\(URL_BASE)\(LATITUDE)\(latitude!)\(LONGITUDE)\(longitude!)\(APP_ID)\(API_KEY)")!
+    func getWeather(onSuccess: @escaping (WeatherModel) -> Void, onError: @escaping (String) -> Void) {
+        let API_URL = URL(string: "\(URL_BASE)\(LATITUDE)\(latitude!)\(LONGITUDE)\(longitude!)\(APP_ID)\(API_KEY)")!
         
-        let task = session.dataTask(with: url) { (data, response, error) in
+        let task = session.dataTask(with: API_URL) { (data, response, error) in
             DispatchQueue.main.async {
                 if let error = error {
                     onError(error.localizedDescription)
@@ -35,11 +35,11 @@ struct NetworkService {
                 do {
                     if response.statusCode == 200 {
                         //parse the succesfull result (Forecast)
-                        let forecastItems = try JSONDecoder().decode(Forecast.self, from: data)
-                        let weatherItems = try JSONDecoder().decode(WeatherItems.self, from: data)
-                        let main = try JSONDecoder().decode(Main.self, from: data)
+                        let forecast = try JSONDecoder().decode(WeatherModel.self, from: data)
+//                        let weather = try JSONDecoder().decode(Forecast.weather.self, from: data)
+//                        let main = try JSONDecoder().decode(Forecast.main.self, from: data)
                         //handle Success
-                        onSuccess(forecastItems, weatherItems, main)
+                        onSuccess(forecast/*, weather, main*/)
                         
                     } else {
                         //show error to user

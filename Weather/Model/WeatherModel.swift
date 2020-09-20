@@ -8,17 +8,20 @@
 
 import Foundation
 
-struct Forecast: Codable {
-    let name: String
+struct WeatherModel: Codable {
+    let weather: [Weather]
+    let name: String?
+    let main: Main
 }
 
-struct WeatherItems: Codable {
+struct Weather: Codable {
     let id: Int
     let main: String
     let description: String
-    let icon: String
 }
 
 struct Main: Codable {
     let temp: Double
+    let temp_min: Float
+    let temp_max: Float
 }

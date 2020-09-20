@@ -22,16 +22,13 @@ class WeatherVC: UIViewController, CLLocationManagerDelegate {
     @IBOutlet weak var currentWeatherLabel: UILabel! //Not Complete, comes from API
     @IBOutlet weak var currentTemperature: UILabel! //Not Complete, comes from API
     @IBOutlet weak var currentWeatherImage: UIImageView! //Not Complete, will change based on data from API
+    @IBOutlet weak var weatherHigh: UILabel!
+    @IBOutlet weak var weatherLow: UILabel!
     @IBOutlet weak var segmentedControl: UISegmentedControl! //Not Complete, will change based on data from API
     
     let date = Date()
     let locManager = CLLocationManager()
-    
-    var forecast: Forecast!
-    var weatherItems: WeatherItems!
-    var main: Main!
-//    var forecast: Forecast!
-//    var forecasts = [Forecast]()
+    let weather = WeatherNetworkService()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,6 +38,7 @@ class WeatherVC: UIViewController, CLLocationManagerDelegate {
         //Request Location Access
         locManager.delegate = self
         locManager.requestWhenInUseAuthorization()
+        locManager.startUpdatingLocation()
     }
     
     //MARK: - CURRENT DATE
@@ -75,16 +73,23 @@ class WeatherVC: UIViewController, CLLocationManagerDelegate {
     
     //MARK: - LOCATION MANAGER
     func getForecast() {
-        NetworkService.shared.getWeather(onSuccess: { (forecast, weatherItems, main) in
-            self.forecast = forecast //call items directly in Forecast struct
-            self.weatherItems = weatherItems
-            self.main = main
+        WeatherNetworkService.shared.getWeather(onSuccess: { (weather) in
             
-            print(forecast)
-            self.currentLocationLabel.text = forecast.name
-            self.currentWeatherLabel.text = weatherItems.description
-            self.currentTemperature.text = "\(main.temp)"
-            self.currentWeatherImage.image = UIImage(named: "")
+            if "mist" == weather.weather[0].description {
+                self.currentWeatherImage.image = UIImage(systemName: "cloud.fog.fill")
+            } else if "haze" == weather.weather[0].description {
+                self.currentWeatherImage.image = UIImage(systemName: "sun.haze.fill")
+            } else if "smoke" == weather.weather[1].description {
+                self.currentWeatherImage.image = UIImage(systemName: "smoke.fill")
+            }
+            
+            print(weather)
+            self.currentLocationLabel.text = weather.name
+            self.currentWeatherLabel.text = weather.weather[0].description
+            
+            self.currentTemperature.text = "\(Int(floor(weather.main.temp * 9/5 - 459.67)))°F"
+            self.weatherHigh.text = "H:\(Int(floor(weather.main.temp_max * 9/5 - 459.67)))°"
+            self.weatherLow.text = "L:\(Int(floor(weather.main.temp_min * 9/5 - 459.67)))°"
             
         }) { (errorMessage) in
             debugPrint(errorMessage)

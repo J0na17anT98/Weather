@@ -13,7 +13,7 @@ class ForecastCell: UICollectionViewCell {
     @IBOutlet weak var temperature: UILabel!
     @IBOutlet weak var forecastImage: UIImageView!
     
-    func updateViews(forecast: Forecast) {
+    func updateViews(forecast: WeatherModel) {
 //        time.text = forecast.time
 //        temperature.text = forecast.temperature
 //        forecastImage.image = UIImage(named: forecast.forecastImage)

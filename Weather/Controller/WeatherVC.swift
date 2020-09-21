@@ -75,17 +75,31 @@ class WeatherVC: UIViewController, CLLocationManagerDelegate {
     func getForecast() {
         WeatherNetworkService.shared.getWeather(onSuccess: { (weather) in
             
-            if "mist" == weather.weather[0].description {
+            if "Mist" == weather.weather[0].main {
                 self.currentWeatherImage.image = UIImage(systemName: "cloud.fog.fill")
-            } else if "haze" == weather.weather[0].description {
+            } else if "Haze" == weather.weather[0].main {
                 self.currentWeatherImage.image = UIImage(systemName: "sun.haze.fill")
-            } else if "smoke" == weather.weather[1].description {
+            } else if "Smoke" == weather.weather[0].main {
                 self.currentWeatherImage.image = UIImage(systemName: "smoke.fill")
+            } else if "Clouds" == weather.weather[0].main {
+                self.currentWeatherImage.image = UIImage(systemName: "cloud.fill")
+            } else if "Clear" == weather.weather[0].main {
+                self.currentWeatherImage.image = UIImage(systemName: "sun.max.fill")
+            } else if "Rain" == weather.weather[0].main {
+                self.currentWeatherImage.image = UIImage(systemName: "cloud.heavyrain.fill")
+            } else if "Snow" == weather.weather[0].main {
+                self.currentWeatherImage.image = UIImage(systemName: "cloud.snow.fill")
+            } else if "Fog" == weather.weather[0].main {
+                self.currentWeatherImage.image = UIImage(systemName: "cloud.fog.fill")
+            } else if "Thunderstorm" == weather.weather[0].main {
+                self.currentWeatherImage.image = UIImage(systemName: "cloud.bolt.rain.fill")
+            } else if "Drizzle" == weather.weather[0].main {
+                self.currentWeatherImage.image = UIImage(systemName: "cloud.sun.rain.fill")
             }
             
             print(weather)
             self.currentLocationLabel.text = weather.name
-            self.currentWeatherLabel.text = weather.weather[0].description
+            self.currentWeatherLabel.text = weather.weather[0].main
             
             self.currentTemperature.text = "\(Int(floor(weather.main.temp * 9/5 - 459.67)))°F"
             self.weatherHigh.text = "H:\(Int(floor(weather.main.temp_max * 9/5 - 459.67)))°"

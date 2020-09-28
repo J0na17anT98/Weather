@@ -25,3 +25,7 @@ struct Main: Codable {
     let temp_min: Float
     let temp_max: Float
 }
+
+struct ForecastModel: Codable {
+    
+}

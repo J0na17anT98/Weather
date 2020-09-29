@@ -13,7 +13,7 @@ import CoreLocation
 var longitude: Double?
 var latitude: Double?
 
-class WeatherVC: UIViewController, CLLocationManagerDelegate {
+class WeatherVC: UIViewController, CLLocationManagerDelegate, UICollectionViewDataSource, UICollectionViewDelegate {
 
     @IBOutlet weak var backgroundGradientView: UIView! //Complete
     @IBOutlet weak var currentDate: UILabel! //Complete
@@ -32,6 +32,8 @@ class WeatherVC: UIViewController, CLLocationManagerDelegate {
     
     let geoCoder = CLGeocoder()
     
+    //MARK: - Collection View Cell Identifier
+    let todaysCellReuseIdentifier = "todaysWeatherCell"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -74,7 +76,7 @@ class WeatherVC: UIViewController, CLLocationManagerDelegate {
         segmentedControl.setTitleTextAttributes(titleTextAttributes, for: .selected)
     }
     
-    //MARK: - LOCATION MANAGER
+    //MARK: - Get Forecast
     func getForecast() {
         CurrentWeatherNetworkService.shared.getCurrentWeather(onSuccess: { (weather) in
             
@@ -114,7 +116,7 @@ class WeatherVC: UIViewController, CLLocationManagerDelegate {
             debugPrint(errorMessage)
         }
     }
-    
+    //MARK: - LOCATION MANAGER
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         if status == .authorizedWhenInUse {
 //            print("\(locManager.location!.coordinate.longitude) & \(locManager.location!.coordinate.latitude)")
@@ -143,4 +145,21 @@ class WeatherVC: UIViewController, CLLocationManagerDelegate {
             }
         })
     }
+    
+    //MARK: - Collection View Protocols
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 5
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: todaysCellReuseIdentifier, for: indexPath as IndexPath) as! ForecastCell
+        cell.temperature.text = "----"
+        cell.backgroundColor = UIColor.clear
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print("You selected cell #\(indexPath.item)!")
+    }
+    
 }

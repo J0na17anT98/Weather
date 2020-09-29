@@ -28,7 +28,10 @@ class WeatherVC: UIViewController, CLLocationManagerDelegate {
     
     let date = Date()
     let locManager = CLLocationManager()
-    let weather = WeatherNetworkService()
+    let weather = CurrentWeatherNetworkService()
+    
+    let geoCoder = CLGeocoder()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,37 +76,39 @@ class WeatherVC: UIViewController, CLLocationManagerDelegate {
     
     //MARK: - LOCATION MANAGER
     func getForecast() {
-        WeatherNetworkService.shared.getWeather(onSuccess: { (weather) in
+        CurrentWeatherNetworkService.shared.getCurrentWeather(onSuccess: { (weather) in
             
-            if "Mist" == weather.weather[0].main {
+            if "Mist" == weather.current.weather[0].main {
                 self.currentWeatherImage.image = UIImage(systemName: "cloud.fog.fill")
-            } else if "Haze" == weather.weather[0].main {
+            } else if "Haze" == weather.current.weather[0].main {
                 self.currentWeatherImage.image = UIImage(systemName: "sun.haze.fill")
-            } else if "Smoke" == weather.weather[0].main {
+            } else if "Smoke" == weather.current.weather[0].main {
                 self.currentWeatherImage.image = UIImage(systemName: "smoke.fill")
-            } else if "Clouds" == weather.weather[0].main {
+            } else if "Clouds" == weather.current.weather[0].main {
                 self.currentWeatherImage.image = UIImage(systemName: "cloud.fill")
-            } else if "Clear" == weather.weather[0].main {
+            } else if "Clear" == weather.current.weather[0].main {
                 self.currentWeatherImage.image = UIImage(systemName: "sun.max.fill")
-            } else if "Rain" == weather.weather[0].main {
+            } else if "Rain" == weather.current.weather[0].main {
                 self.currentWeatherImage.image = UIImage(systemName: "cloud.heavyrain.fill")
-            } else if "Snow" == weather.weather[0].main {
+            } else if "Snow" == weather.current.weather[0].main {
                 self.currentWeatherImage.image = UIImage(systemName: "cloud.snow.fill")
-            } else if "Fog" == weather.weather[0].main {
+            } else if "Fog" == weather.current.weather[0].main {
                 self.currentWeatherImage.image = UIImage(systemName: "cloud.fog.fill")
-            } else if "Thunderstorm" == weather.weather[0].main {
+            } else if "Thunderstorm" == weather.current.weather[0].main {
                 self.currentWeatherImage.image = UIImage(systemName: "cloud.bolt.rain.fill")
-            } else if "Drizzle" == weather.weather[0].main {
+            } else if "Drizzle" == weather.current.weather[0].main {
                 self.currentWeatherImage.image = UIImage(systemName: "cloud.sun.rain.fill")
             }
             
-            print(weather)
-            self.currentLocationLabel.text = weather.name
-            self.currentWeatherLabel.text = weather.weather[0].main
+            print(weather) //Print this to show JSON
+//            self.currentLocationLabel.text = weather.name
+            self.currentWeatherLabel.text = weather.current.weather[0].main
             
-            self.currentTemperature.text = "\(Int(floor(weather.main.temp * 9/5 - 459.67)))°F"
-            self.weatherHigh.text = "H:\(Int(floor(weather.main.temp_max * 9/5 - 459.67)))°"
-            self.weatherLow.text = "L:\(Int(floor(weather.main.temp_min * 9/5 - 459.67)))°"
+//            self.currentTemperature.text = "\(Int(floor(weather.main.temp * 9/5 - 459.67)))°F"
+            self.currentTemperature.text = "\(Int(floor(weather.current.temp * 9/5 - 459.67)))°F"
+            self.weatherLow.text = "H:\(Int(floor(weather.daily[0].temp.min * 9/5 - 459.67)))°F"
+            self.weatherHigh.text = "H:\(Int(floor(weather.daily[0].temp.max * 9/5 - 459.67)))°F"
+
             
         }) { (errorMessage) in
             debugPrint(errorMessage)
@@ -117,10 +122,25 @@ class WeatherVC: UIViewController, CLLocationManagerDelegate {
             latitude = locManager.location!.coordinate.latitude
             print("\(longitude!) & \(latitude!)")
             getForecast()
+            showLocationName()
         }
     }
 
     func locationManager(_ locManager: CLLocationManager, didFailWithError error: Error) {
         print("Failed to find user's location: \(error.localizedDescription)")
+    }
+    
+    func showLocationName() {
+        let location = CLLocation(latitude: latitude ?? 0, longitude:  longitude ?? 0)
+        geoCoder.reverseGeocodeLocation(location, completionHandler: { (placemarks, _) -> Void in
+
+            placemarks?.forEach { (placemark) in
+
+                if let city = placemark.locality {
+                    print(city)
+                    self.currentLocationLabel.text = city
+                }
+            }
+        })
     }
 }

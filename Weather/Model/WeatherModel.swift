@@ -7,11 +7,31 @@
 //
 
 import Foundation
+//MARK: - Old Weather Model
+//struct OldWeatherModel: Codable {
+//    let weather: [Weather]
+//    let name: String?
+//    let main: Main
+//}
+//
+//struct Weather: Codable {
+//    let id: Int
+//    let main: String
+//    let description: String
+//}
+//
+//struct Main: Codable {
+//    let temp: Double
+//    let temp_min: Float
+//    let temp_max: Float
+//}
 
+//MARK: - Weather Model
 struct WeatherModel: Codable {
-    let weather: [Weather]
-    let name: String?
-    let main: Main
+    let current: Current
+    let hourly: [Hourly]
+    let daily: [Daily]
+//    let name: String?
 }
 
 struct Weather: Codable {
@@ -20,12 +40,29 @@ struct Weather: Codable {
     let description: String
 }
 
-struct Main: Codable {
+struct Current: Codable {
+    let sunrise: Double
+    let sunset: Double
     let temp: Double
-    let temp_min: Float
-    let temp_max: Float
+    let feels_like: Double
+    let weather: [Weather] //Using Weather from Old Weather Model
 }
 
-struct ForecastModel: Codable {
-    
+struct Hourly: Codable {
+    //returns 48hrs worth of hourly forecast. At most, will be using 5hrs.
+    let temp: Double
+//    let feels_like: Double
+    let weather: [Weather] //Using Weather from Old Weather Model
+}
+
+struct Daily: Codable {
+    let sunrise: Double
+    let sunset: Double
+    let temp: Temp
+    let weather: [Weather] //Using Weather from Old Weather Model
+}
+
+struct Temp: Codable {
+    let min: Float
+    let max: Float
 }

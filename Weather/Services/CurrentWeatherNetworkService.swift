@@ -11,17 +11,17 @@ import Foundation
 class CurrentWeatherNetworkService {
     static let shared = CurrentWeatherNetworkService()
     
-    let URL_BASE = "http://api.openweathermap.org/data/2.5/weather?"//"https://api.openweathermap.org/data/2.5/onecall?"
+    let URL_BASE = "https://api.openweathermap.org/data/2.5/onecall?" //"http://api.openweathermap.org/data/2.5/weather?"
     let LATITUDE = "lat="
     let LONGITUDE = "&lon="
-//    let EXCLUDE = "&exclude=alerts"
+    let EXCLUDE = "&exclude=alerts,minutely"
     let APP_ID = "&appid="
     let API_KEY = "10d6bb5afb374912a2c7e74d5cf91353"
     
     let session = URLSession(configuration: .default)
     
-    func getWeather(onSuccess: @escaping (WeatherModel) -> Void, onError: @escaping (String) -> Void) {
-        let API_URL = URL(string: "\(URL_BASE)\(LATITUDE)\(latitude!)\(LONGITUDE)\(longitude!)\(APP_ID)\(API_KEY)")!
+    func getCurrentWeather(onSuccess: @escaping (WeatherModel) -> Void, onError: @escaping (String) -> Void) {
+        let API_URL = URL(string: "\(URL_BASE)\(LATITUDE)\(latitude!)\(LONGITUDE)\(longitude!)\(EXCLUDE)\(APP_ID)\(API_KEY)")!
         
         let task = session.dataTask(with: API_URL) { (data, response, error) in
             DispatchQueue.main.async {

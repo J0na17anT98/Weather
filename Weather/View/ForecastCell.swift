@@ -17,6 +17,8 @@ class ForecastCell: UICollectionViewCell {
 //        time.text = forecast.time
 //        temperature.text = forecast.temperature
 //        forecastImage.image = UIImage(named: forecast.forecastImage)
+        time.text = "Some time here"
+        temperature.text = "\(forecast.hourly[0])"
     }
     
 }

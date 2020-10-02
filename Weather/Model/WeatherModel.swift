@@ -45,21 +45,21 @@ struct Current: Codable {
     let sunset: Double
     let temp: Double
     let feels_like: Double
-    let weather: [Weather]
+    let weather: [Weather] //Using Weather from Old Weather Model
 }
 
 struct Hourly: Codable {
     //returns 48hrs worth of hourly forecast. At most, will be using 5hrs.
     let temp: Double
 //    let feels_like: Double
-    let weather: [Weather]
+    let weather: [Weather] //Using Weather from Old Weather Model
 }
 
 struct Daily: Codable {
     let sunrise: Double
     let sunset: Double
     let temp: Temp
-    let weather: [Weather]
+    let weather: [Weather] //Using Weather from Old Weather Model
 }
 
 struct Temp: Codable {

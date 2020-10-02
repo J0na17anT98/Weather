@@ -217,7 +217,7 @@
                                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         </collectionViewFlowLayout>
                                         <cells>
-                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="todaysForecastWeatherCell" id="asZ-oy-75p" customClass="TodaysForecastCell" customModule="Weather" customModuleProvider="target">
+                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="todaysWeatherCell" id="asZ-oy-75p" customClass="ForecastCell" customModule="Weather" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="-3.5" width="103" height="103"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="Agl-nX-5xq">
@@ -261,6 +261,10 @@
                                                 </connections>
                                             </collectionViewCell>
                                         </cells>
+                                        <connections>
+                                            <outlet property="dataSource" destination="BYZ-38-t0r" id="bLD-Lg-2lS"/>
+                                            <outlet property="delegate" destination="BYZ-38-t0r" id="cnt-JX-eIB"/>
+                                        </connections>
                                     </collectionView>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemGreenColor"/>
@@ -308,7 +312,6 @@
                         <outlet property="currentWeatherImage" destination="agx-l4-NWr" id="bdc-M9-Bza"/>
                         <outlet property="currentWeatherLabel" destination="5gw-91-UYK" id="1ul-wh-V06"/>
                         <outlet property="segmentedControl" destination="qe9-vK-J2Z" id="QWC-Jl-4SK"/>
-                        <outlet property="todaysForecastCollectionView" destination="ona-Gt-Lfy" id="DUL-4k-Kg2"/>
                         <outlet property="weatherHigh" destination="mi3-a8-QsU" id="KUf-GP-Oed"/>
                         <outlet property="weatherLow" destination="SOW-Tq-kb7" id="KNW-oj-nE5"/>
                     </connections>

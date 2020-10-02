@@ -8,17 +8,17 @@
 
 import UIKit
 
-class TodaysForecastCell: UICollectionViewCell {
+class ForecastCell: UICollectionViewCell {
     @IBOutlet weak var time: UILabel!
     @IBOutlet weak var temperature: UILabel!
     @IBOutlet weak var forecastImage: UIImageView!
     
-    func updateTodaysForecastViews(todaysForecast: WeatherModel) {
+    func updateForecastViews(forecast: WeatherModel) {
 //        time.text = "\(forecast.hourly[0])"
 //        temperature.text = forecast.temperature
 //        forecastImage.image = UIImage(named: forecast.forecastImage)
-        time.text = "\(todaysForecast.hourly.description)" //change this
-        temperature.text = "\(todaysForecast.hourly[0].temp)"
+        time.text = "Some time here"
+        temperature.text = "\(forecast.hourly[0])"
     }
     
 }

@@ -125,7 +125,6 @@ class WeatherVC: UIViewController, CLLocationManagerDelegate, UICollectionViewDa
             print("\(longitude!) & \(latitude!)")
             getForecast()
             showLocationName()
-            
         }
     }
 
@@ -153,7 +152,7 @@ class WeatherVC: UIViewController, CLLocationManagerDelegate, UICollectionViewDa
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: todaysCellReuseIdentifier, for: indexPath as IndexPath) as! TodaysForecastCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: todaysCellReuseIdentifier, for: indexPath as IndexPath) as! ForecastCell
         cell.backgroundColor = UIColor.clear
         return cell
     }

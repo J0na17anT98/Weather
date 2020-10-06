@@ -152,7 +152,7 @@ class WeatherVC: UIViewController, CLLocationManagerDelegate, UICollectionViewDa
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: todaysCellReuseIdentifier, for: indexPath as IndexPath) as! ForecastCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: todaysCellReuseIdentifier, for: indexPath) as! ForecastCell
         cell.backgroundColor = UIColor.clear
         return cell
     }

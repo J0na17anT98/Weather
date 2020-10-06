@@ -2,8 +2,8 @@
 //  AppDelegate.swift
 //  Weather
 //
-//  Created by ---- ---- on 9/11/20.
-//  Copyright © 2020 ---- ----. All rights reserved.
+//  Created by Jonathan Tsistinas on 9/11/20.
+//  Copyright © 2020 Jonathan Tsistinas. All rights reserved.
 //
 
 import UIKit

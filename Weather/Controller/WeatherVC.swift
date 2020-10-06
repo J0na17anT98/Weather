@@ -2,8 +2,8 @@
 //  ViewController.swift
 //  Weather
 //
-//  Created by ---- ---- on 9/11/20.
-//  Copyright © 2020 ---- ----. All rights reserved.
+//  Created by Jonathan Tsistinas on 9/11/20.
+//  Copyright © 2020 Jonathan Tsistinas. All rights reserved.
 //
 
 import UIKit
@@ -148,7 +148,7 @@ class WeatherVC: UIViewController, CLLocationManagerDelegate, UICollectionViewDa
     
     //MARK: - Collection View Protocols
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return 5
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

@@ -13,7 +13,7 @@ import CoreLocation
 var longitude: Double?
 var latitude: Double?
 
-class WeatherVC: UIViewController, CLLocationManagerDelegate, UICollectionViewDataSource, UICollectionViewDelegate {
+class WeatherVC: UIViewController, CLLocationManagerDelegate {
 
     @IBOutlet weak var backgroundGradientView: UIView! //Complete
     @IBOutlet weak var currentDate: UILabel! //Complete
@@ -25,15 +25,14 @@ class WeatherVC: UIViewController, CLLocationManagerDelegate, UICollectionViewDa
     @IBOutlet weak var weatherHigh: UILabel!
     @IBOutlet weak var weatherLow: UILabel!
     @IBOutlet weak var segmentedControl: UISegmentedControl! //Not Complete, will change based on data from API
+    @IBOutlet weak var todaysWeatherCollectionView: UICollectionView!
     
     let date = Date()
     let locManager = CLLocationManager()
-    let weather = CurrentWeatherNetworkService()
+    let weather = NetworkService()
+    var weatherForCell = [Any]()
     
     let geoCoder = CLGeocoder()
-    
-    //MARK: - Collection View Cell Identifier
-    let todaysCellReuseIdentifier = "todaysWeatherCell"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -78,7 +77,9 @@ class WeatherVC: UIViewController, CLLocationManagerDelegate, UICollectionViewDa
     
     //MARK: - Get Forecast
     func getForecast() {
-        CurrentWeatherNetworkService.shared.getCurrentWeather(onSuccess: { (weather) in
+        NetworkService.shared.getWeather(onSuccess: { (weather) in
+            
+            self.weatherForCell = weather.hourly
             
             if "Mist" == weather.current.weather[0].main {
                 self.currentWeatherImage.image = UIImage(systemName: "cloud.fog.fill")
@@ -110,7 +111,8 @@ class WeatherVC: UIViewController, CLLocationManagerDelegate, UICollectionViewDa
             self.currentTemperature.text = "\(Int(floor(weather.current.temp * 9/5 - 459.67)))°F"
             self.weatherLow.text = "H:\(Int(floor(weather.daily[0].temp.min * 9/5 - 459.67)))°F"
             self.weatherHigh.text = "H:\(Int(floor(weather.daily[0].temp.max * 9/5 - 459.67)))°F"
-
+            
+            self.todaysWeatherCollectionView.reloadData()
             
         }) { (errorMessage) in
             debugPrint(errorMessage)
@@ -145,20 +147,23 @@ class WeatherVC: UIViewController, CLLocationManagerDelegate, UICollectionViewDa
             }
         })
     }
-    
-    //MARK: - Collection View Protocols
+}
+
+//MARK: - Collection View Protocols
+extension WeatherVC: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        return 10
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: todaysCellReuseIdentifier, for: indexPath) as! ForecastCell
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "todaysWeatherCell", for: indexPath) as? WeatherCell else { return UICollectionViewCell()}
         cell.backgroundColor = UIColor.clear
+//        print(weatherForCell)
+//        cell.configureCell(weather: weatherForCell[indexPath.item] as! WeatherModel)
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print("You selected cell #\(indexPath.item)!")
     }
-    
 }

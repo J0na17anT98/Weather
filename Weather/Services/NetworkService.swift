@@ -8,8 +8,8 @@
 
 import Foundation
 
-class CurrentWeatherNetworkService {
-    static let shared = CurrentWeatherNetworkService()
+class NetworkService {
+    static let shared = NetworkService()
     
     let URL_BASE = "https://api.openweathermap.org/data/2.5/onecall?" //"http://api.openweathermap.org/data/2.5/weather?"
     let LATITUDE = "lat="
@@ -20,7 +20,7 @@ class CurrentWeatherNetworkService {
     
     let session = URLSession(configuration: .default)
     
-    func getCurrentWeather(onSuccess: @escaping (WeatherModel) -> Void, onError: @escaping (String) -> Void) {
+    func getWeather(onSuccess: @escaping (WeatherModel) -> Void, onError: @escaping (String) -> Void) {
         let API_URL = URL(string: "\(URL_BASE)\(LATITUDE)\(latitude!)\(LONGITUDE)\(longitude!)\(EXCLUDE)\(APP_ID)\(API_KEY)")!
         
         let task = session.dataTask(with: API_URL) { (data, response, error) in
@@ -37,11 +37,7 @@ class CurrentWeatherNetworkService {
                     if response.statusCode == 200 {
                         //parse the succesfull result (Forecast)
                         let forecast = try JSONDecoder().decode(WeatherModel.self, from: data)
-//                        let weather = try JSONDecoder().decode(Forecast.weather.self, from: data)
-//                        let main = try JSONDecoder().decode(Forecast.main.self, from: data)
-                        //handle Success
-                        onSuccess(forecast/*, weather, main*/)
-                        
+                        onSuccess(forecast)
                     } else {
                         //show error to user
                         let err = try JSONDecoder().decode(APIError.self, from: data)
@@ -55,9 +51,4 @@ class CurrentWeatherNetworkService {
         }
         task.resume()
     }
-    
-//   typealias DownloadComplete = () -> ()
-//
-//    let CURRENT_WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather?lat=\(latitude!)&lon=\(longitude!)&appid=0001911cebe16b8728c037499b068e0d"
-//    let FORECAST_URL = "http://api.openweathermap.org/data/2.5/forecast/daily?lat=\(latitude!)&lon=\(longitude!)&cnt=10&mode=json&appid=0001911cebe16b8728c037499b068e0d"
 }

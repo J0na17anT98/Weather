@@ -29,8 +29,8 @@ class WeatherVC: UIViewController, CLLocationManagerDelegate {
     
     let date = Date()
     let locManager = CLLocationManager()
-    let weather = NetworkService()
-    var weatherForCell = [Any]()
+//    let weather = NetworkService()
+    var weather = Array<Hourly>()
     
     let geoCoder = CLGeocoder()
     
@@ -39,10 +39,15 @@ class WeatherVC: UIViewController, CLLocationManagerDelegate {
         gradient()
         displayCurrentdate()
         
+        todaysWeatherCollectionView.delegate = self
+        todaysWeatherCollectionView.dataSource = self
+        
         //Request Location Access
         locManager.delegate = self
         locManager.requestWhenInUseAuthorization()
         locManager.startUpdatingLocation()
+        
+        
     }
     
     //MARK: - CURRENT DATE
@@ -76,10 +81,13 @@ class WeatherVC: UIViewController, CLLocationManagerDelegate {
     }
     
     //MARK: - Get Forecast
-    func getForecast() {
+    func getWeather() {
         NetworkService.shared.getWeather(onSuccess: { (weather) in
             
-            self.weatherForCell = weather.hourly
+            self.weather = weather.hourly
+            print(self.weather)
+            self.todaysWeatherCollectionView.reloadData()
+//            print(self.weatherForCell)
             
             if "Mist" == weather.current.weather[0].main {
                 self.currentWeatherImage.image = UIImage(systemName: "cloud.fog.fill")
@@ -103,7 +111,7 @@ class WeatherVC: UIViewController, CLLocationManagerDelegate {
                 self.currentWeatherImage.image = UIImage(systemName: "cloud.sun.rain.fill")
             }
             
-            print(weather) //Print this to show JSON
+//            print(weather) //Print this to show JSON
 //            self.currentLocationLabel.text = weather.name
             self.currentWeatherLabel.text = weather.current.weather[0].main
             
@@ -125,7 +133,7 @@ class WeatherVC: UIViewController, CLLocationManagerDelegate {
             longitude = locManager.location!.coordinate.longitude
             latitude = locManager.location!.coordinate.latitude
             print("\(longitude!) & \(latitude!)")
-            getForecast()
+            getWeather()
             showLocationName()
         }
     }
@@ -151,16 +159,20 @@ class WeatherVC: UIViewController, CLLocationManagerDelegate {
 
 //MARK: - Collection View Protocols
 extension WeatherVC: UICollectionViewDataSource, UICollectionViewDelegate {
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return 1
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "todaysWeatherCell", for: indexPath) as? WeatherCell else { return UICollectionViewCell()}
+        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "todaysWeatherCell", for: indexPath) as? WeatherCell {
         cell.backgroundColor = UIColor.clear
-//        print(weatherForCell)
-//        cell.configureCell(weather: weatherForCell[indexPath.item] as! WeatherModel)
+            let hourlyWeather = weather.self
+//            cell.updateCell(weather: weather[indexPath.row])
+            cell.temperature.text = "\(hourlyWeather.description)"
         return cell
+        }
+        return UICollectionViewCell()
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

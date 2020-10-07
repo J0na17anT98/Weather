@@ -13,17 +13,25 @@ class WeatherCell: UICollectionViewCell {
     @IBOutlet weak var temperature: UILabel!
     @IBOutlet weak var forecastImage: UIImageView!
     
-    func configureCell(weather: WeatherModel) {
-        self.time.text = "\(weather.hourly[0])"
-        self.temperature.text = "show weather here"
+    func updateCell(weather: Hourly) {
+        
+//        time.text = "\(weather.hourly[0])"
+        temperature.text = "\(weather.temp)"
+        
+//        if self.time.text == "", self.time.text == "" {
+//            print("there is no data")
+//        } else {
+//            self.time.text = "\(weather.hourly[0])"
+//            self.temperature.text = "show weather here"
+//        }
     }
     
-    func updateForecastViews(weather: WeatherModel) {
-//        time.text = "\(forecast.hourly[0])"
-//        temperature.text = forecast.temperature
-//        forecastImage.image = UIImage(named: forecast.forecastImage)
-        time.text = "Some time here"
-        temperature.text = "\(weather.hourly[0])"
-    }
+//    func updateForecastViews(weather: WeatherModel) {
+////        time.text = "\(forecast.hourly[0])"
+////        temperature.text = forecast.temperature
+////        forecastImage.image = UIImage(named: forecast.forecastImage)
+//        time.text = "Some time here"
+//        temperature.text = "\(weather.hourly[0])"
+//    }
     
 }

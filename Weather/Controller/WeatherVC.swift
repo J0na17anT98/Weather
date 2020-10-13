@@ -29,8 +29,6 @@ class WeatherVC: UIViewController, CLLocationManagerDelegate {
     
     let date = Date()
     let locManager = CLLocationManager()
-//    let weather = NetworkService()
-    var weather = Array<Hourly>()
     
     let geoCoder = CLGeocoder()
     
@@ -81,11 +79,8 @@ class WeatherVC: UIViewController, CLLocationManagerDelegate {
     }
     
     //MARK: - Get Forecast
-    func getWeather() {
+    func displayWeather() {
         NetworkService.shared.getWeather(onSuccess: { (weather) in
-            
-            self.weather = weather.hourly
-            print(self.weather)
             self.todaysWeatherCollectionView.reloadData()
 //            print(self.weatherForCell)
             
@@ -120,12 +115,11 @@ class WeatherVC: UIViewController, CLLocationManagerDelegate {
             self.weatherLow.text = "H:\(Int(floor(weather.daily[0].temp.min * 9/5 - 459.67)))°F"
             self.weatherHigh.text = "H:\(Int(floor(weather.daily[0].temp.max * 9/5 - 459.67)))°F"
             
-            self.todaysWeatherCollectionView.reloadData()
-            
         }) { (errorMessage) in
             debugPrint(errorMessage)
         }
     }
+    
     //MARK: - LOCATION MANAGER
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         if status == .authorizedWhenInUse {
@@ -133,7 +127,7 @@ class WeatherVC: UIViewController, CLLocationManagerDelegate {
             longitude = locManager.location!.coordinate.longitude
             latitude = locManager.location!.coordinate.latitude
             print("\(longitude!) & \(latitude!)")
-            getWeather()
+            displayWeather()
             showLocationName()
         }
     }
@@ -167,9 +161,9 @@ extension WeatherVC: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "todaysWeatherCell", for: indexPath) as? WeatherCell {
         cell.backgroundColor = UIColor.clear
-            let hourlyWeather = weather.self
-//            cell.updateCell(weather: weather[indexPath.row])
-            cell.temperature.text = "\(hourlyWeather.description)"
+            
+//            cell.updateCell(weather: hourlyWeather.description)
+//            cell.temperature.text = "\(hourlyWeather.description)"
         return cell
         }
         return UICollectionViewCell()

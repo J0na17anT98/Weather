@@ -35,9 +35,9 @@ class NetworkService {
                 }
                 do {
                     if response.statusCode == 200 {
-                        //parse the succesfull result (Forecast)
-                        let forecast = try JSONDecoder().decode(WeatherModel.self, from: data)
-                        onSuccess(forecast)
+                        //parse the succesfull result (weather)
+                        let weather = try JSONDecoder().decode(WeatherModel.self, from: data)
+                        onSuccess(weather)
                     } else {
                         //show error to user
                         let err = try JSONDecoder().decode(APIError.self, from: data)
